@@ -68,7 +68,9 @@ var TrashModel = function(_lable, _cell, remarks) {
     var mm = flag[1].split(" ");
   } else {
     this.dayCell = _cell.split(" ");
-    var mm = new Array("4", "5", "6", "7", "8", "9", "10", "11", "12", "1", "2", "3");
+    var mm = new Array("4", "5", "6", "7", "8", "9", "10", "11", "12", "1", 
+
+"2", "3");
   }
   for (var m in mm) {
     this.mflag[mm[m] - 1] = 1;
@@ -83,9 +85,15 @@ var TrashModel = function(_lable, _cell, remarks) {
   for (var j in this.dayCell) {
     if (this.dayCell[j].length == 1) {
       result_text += "毎週" + this.dayCell[j] + "曜日 ";
-    } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) != "*") {
-      result_text += "第" + this.dayCell[j].charAt(1) + this.dayCell[j].charAt(0) + "曜日 ";
-    } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) == "*") {
+    } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) != 
+
+"*") {
+      result_text += "第" + this.dayCell[j].charAt(1) + this.dayCell
+
+[j].charAt(0) + "曜日 ";
+    } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) == 
+
+"*") {
     } else {
       // 不定期回収の場合（YYYYMMDD指定）
       result_text = "不定期 ";
@@ -95,7 +103,9 @@ var TrashModel = function(_lable, _cell, remarks) {
   this.dayLabel = result_text;
 
   this.getDateLabel = function() {
-    var result_text = this.mostRecent.getFullYear() + "/" + (1 + this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
+    var result_text = this.mostRecent.getFullYear() + "/" + (1 + 
+
+this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
     return this.getRemark() + this.dayLabel + " " + result_text;
   }
 
@@ -110,7 +120,9 @@ var TrashModel = function(_lable, _cell, remarks) {
     return -1;
   }
   /**
-   * このごみ収集日が特殊な条件を持っている場合備考を返します。収集日データに"*n" が入っている場合に利用されます
+   * このごみ収集日が特殊な条件を持っている場合備考を返します。収集日データ
+
+に"*n" が入っている場合に利用されます
    */
   this.getRemark = function getRemark() {
     var ret = "";
@@ -127,7 +139,9 @@ var TrashModel = function(_lable, _cell, remarks) {
   }
   /**
   このゴミの年間のゴミの日を計算します。
-  センターが休止期間がある場合は、その期間１週間ずらすという実装を行っております。
+  センターが休止期間がある場合は、その期間１週間ずらすという実装を行っておりま
+
+す。
 */
   this.calcMostRect = function(areaObj) {
     var day_mix = this.dayCell;
@@ -161,9 +175,13 @@ var TrashModel = function(_lable, _cell, remarks) {
             var d = new Date(date);
             //コンストラクタでやろうとするとうまく行かなかった。。
             //
-            //4月1日を基準にして曜日の差分で時間を戻し、最大５週までの増加させて毎週を表現
+            //4月1日を基準にして曜日の差分で時間を戻し、最大５週までの増加させ
+
+て毎週を表現
             d.setTime(date.getTime() + 1000 * 60 * 60 * 24 *
-              ((7 + getDayIndex(day_mix[j].charAt(0)) - date.getDay()) % 7) + week * 7 * 24 * 60 * 60 * 1000
+              ((7 + getDayIndex(day_mix[j].charAt(0)) - date.getDay()) % 7) + 
+
+week * 7 * 24 * 60 * 60 * 1000
             );
             //年末年始のずらしの対応
             //休止期間なら、今後の日程を１週間ずらす
@@ -215,7 +233,9 @@ var TrashModel = function(_lable, _cell, remarks) {
     var now = new Date();
 
     for (var i in day_list) {
-      if (this.mostRecent == null && now.getTime() < day_list[i].getTime() + 24 * 60 * 60 * 1000) {
+      if (this.mostRecent == null && now.getTime() < day_list[i].getTime() + 
+
+24 * 60 * 60 * 1000) {
         this.mostRecent = day_list[i];
         break;
       }
@@ -230,7 +250,9 @@ var TrashModel = function(_lable, _cell, remarks) {
     var day_text = "<ul>";
     for (var i in this.dayList) {
       var d = this.dayList[i];
-      day_text += "<li>" + d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + "</li>";
+      day_text += "<li>" + d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + 
+
+d.getDate() + "</li>";
     };
     day_text += "</ul>";
     return day_text;
@@ -367,9 +389,13 @@ $(function() {
         select_html += '<option value="-1">地域を選択してください</option>';
         for (var row_index in areaModels) {
           var area_name = areaModels[row_index].label;
-          var selected = (selected_name == area_name) ? 'selected="selected"' : "";
+          var selected = (selected_name == area_name) ? 'selected="selected"' 
 
-          select_html += '<option value="' + row_index + '" ' + selected + " >" + area_name + "</option>";
+: "";
+
+          select_html += '<option value="' + row_index + '" ' + selected + " 
+
+>" + area_name + "</option>";
         }
 
         //デバッグ用
@@ -422,7 +448,9 @@ $(function() {
 
   function updateData(row_index) {
     //SVG が使えるかどうかの判定を行う。
-    //TODO Android 2.3以下では見れない（代替の表示も含め）不具合が改善されてない。。
+    //TODO Android 2.3以下では見れない（代替の表示も含め）不具合が改善されてな
+
+い。。
     //参考 http://satussy.blogspot.jp/2011/12/javascript-svg.html
     var ableSVG = (window.SVGAngle !== void 0);
     //var ableSVG = false;  // SVG未使用の場合、descriptionの1項目目を使用
@@ -435,7 +463,9 @@ $(function() {
     var accordion_height = window.innerHeight / descriptions.length;
     if(descriptions.length>4){
       accordion_height = window.innerHeight / 4.1;
-      if (accordion_height>140) {accordion_height = window.innerHeight / descriptions.length;};
+      if (accordion_height>140) {accordion_height = window.innerHeight / 
+
+descriptions.length;};
       if (accordion_height<130) {accordion_height=130;};
     }
     var styleHTML = "";
@@ -467,7 +497,9 @@ $(function() {
               target_tag += "<ul>";
             }
 
-            target_tag += '<li style="list-style:none;">' + target.name + "</li>";
+            target_tag += '<li style="list-style:none;">' + target.name + 
+
+"</li>";
             target_tag += '<p class="note">' + target.notice + "</p>";
           }
 
@@ -475,7 +507,9 @@ $(function() {
 
           var dateLabel = trash.getDateLabel();
           //あと何日かを計算する処理です。
-          var leftDay = Math.ceil((trash.mostRecent.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+          var leftDay = Math.ceil((trash.mostRecent.getTime() - today.getTime
+
+()) / (1000 * 60 * 60 * 24))
 
           var leftDayText = "";
           if (leftDay == 0) {
@@ -487,19 +521,38 @@ $(function() {
           } else {
             leftDayText = leftDay + "日後";
           }
+          
+          //styleHTML += '#accordion-group' + d_no + '{background-color:  ' + 
 
-          styleHTML += '#accordion-group' + d_no + '{background-color:  ' + description.background + ';} ';
+description.background + ';} ';
+	  //IE対応
+          styleHTML = 'background-color:  ' + description.background ;
 
           accordionHTML +=
-            '<div class="accordion-group" id="accordion-group' + d_no + '">' +
+            //'<div class="accordion-group" id="accordion-group' + d_no + '">' 
+
++
+	    //IE対応
+            '<div class="accordion-group" id="accordion-group' + d_no + '" 
+
+style="' + styleHTML + '">' +
+
             '<div class="accordion-heading">' +
-            '<a class="accordion-toggle" style="height:' + accordion_height + 'px" data-toggle="collapse" data-parent="#accordion" href="#collapse' + i + '">' +
+            '<a class="accordion-toggle" style="height:' + accordion_height + 
+
+'px" data-toggle="collapse" data-parent="#accordion" href="#collapse' + i + 
+
+'">' +
             '<div class="left-day">' + leftDayText + '</div>' +
             '<div class="accordion-table" >';
           if (ableSVG && SVGLabel) {
-            accordionHTML += '<img src="' + description.styles + '" alt="' + description.label + '"  />';
+            accordionHTML += '<img src="' + description.styles + '" alt="' + 
+
+description.label + '"  />';
           } else {
-            accordionHTML += '<p class="text-center">' + description.label + "</p>";
+            accordionHTML += '<p class="text-center">' + description.label + 
+
+"</p>";
           }
           accordionHTML += "</div>" +
             '<h6><p class="text-left date">' + dateLabel + "</p></h6>" +
@@ -513,10 +566,11 @@ $(function() {
             "</div>";
       }
     }
+    
+    //IE対応
+    //$("#accordion-style").html('<!-- ' + styleHTML + ' -->');
 
-    $("#accordion-style").html('<!-- ' + styleHTML + ' -->');
-
-    var accordion_elm = $("#accordion");
+   var accordion_elm = $("#accordion");
     accordion_elm.html(accordionHTML);
 
     $('html,body').animate({scrollTop: 0}, 'fast');
@@ -545,7 +599,9 @@ $(function() {
     }
     setSelectedAreaName(areaModels[row_index].label);
 
-    if ($("#accordion").children().length === 0 && descriptions.length === 0) {
+    if ($("#accordion").children().length === 0 && descriptions.length === 0) 
+
+{
 
       createMenuList(function() {
         updateData(row_index);
