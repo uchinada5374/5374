@@ -14,7 +14,6 @@ const WeekShift = true; // 休止期間なら週をずらすときは、true。�
 
 */
 
-
 //IE対応 const -> var
 var SVGLabel = false;
 // SVGイメージを使用するときは、true。用意できない場合はfalse。
