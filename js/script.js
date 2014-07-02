@@ -20,6 +20,9 @@ var AreaModel = function() {
     休止期間（主に年末年始）かどうかを判定します。
   */
   this.isBlankDay = function(currentDate) {
+    if (!this.center) {
+        return false;
+    }
     var period = [this.center.startDate, this.center.endDate];
 
     if (period[0].getTime() <= currentDate.getTime() &&
@@ -62,15 +65,14 @@ var TrashModel = function(_lable, _cell, remarks) {
   this.mostRecent;
   this.dayList;
   this.mflag = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  if (_cell.search(/:/) >= 0) {
+  var monthSplitFlag=_cell.search(/:/)>=0
+  if (monthSplitFlag) {
     var flag = _cell.split(":");
     this.dayCell = flag[0].split(" ");
     var mm = flag[1].split(" ");
   } else {
     this.dayCell = _cell.split(" ");
-    var mm = new Array("4", "5", "6", "7", "8", "9", "10", "11", "12", "1", 
-
-"2", "3");
+    var mm = new Array("4", "5", "6", "7", "8", "9", "10", "11", "12", "1", "2", "3");
   }
   for (var m in mm) {
     this.mflag[mm[m] - 1] = 1;
@@ -85,27 +87,34 @@ var TrashModel = function(_lable, _cell, remarks) {
   for (var j in this.dayCell) {
     if (this.dayCell[j].length == 1) {
       result_text += "毎週" + this.dayCell[j] + "曜日 ";
-    } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) != 
-
-"*") {
-      result_text += "第" + this.dayCell[j].charAt(1) + this.dayCell
-
-[j].charAt(0) + "曜日 ";
-    } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) == 
-
-"*") {
+    } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) != "*") {
+      result_text += "第" + this.dayCell[j].charAt(1) + this.dayCell[j].charAt(0) + "曜日 ";
+    } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) == "*") {
     } else {
       // 不定期回収の場合（YYYYMMDD指定）
       result_text = "不定期 ";
       this.regularFlg = 0;  // 定期回収フラグオフ
     }
   }
+  if (monthSplitFlag){
+    var monthList="";
+    for (var m in this.mflag) {
+      if (this.mflag[m]){
+        if (monthList.length>0){
+          monthList+=","
+        }
+        //mを整数化
+        monthList+=((m-0)+1)
+      }
+    };
+    monthList+="月 "
+    result_text=monthList+result_text
+  }
   this.dayLabel = result_text;
 
-  this.getDateLabel = function() {
-    var result_text = this.mostRecent.getFullYear() + "/" + (1 + 
 
-this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
+  this.getDateLabel = function() {
+    var result_text = this.mostRecent.getFullYear() + "/" + (1 + this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
     return this.getRemark() + this.dayLabel + " " + result_text;
   }
 
@@ -120,9 +129,7 @@ this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
     return -1;
   }
   /**
-   * このごみ収集日が特殊な条件を持っている場合備考を返します。収集日データ
-
-に"*n" が入っている場合に利用されます
+   * このごみ収集日が特殊な条件を持っている場合備考を返します。収集日データに"*n" が入っている場合に利用されます
    */
   this.getRemark = function getRemark() {
     var ret = "";
@@ -139,9 +146,7 @@ this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
   }
   /**
   このゴミの年間のゴミの日を計算します。
-  センターが休止期間がある場合は、その期間１週間ずらすという実装を行っておりま
-
-す。
+  センターが休止期間がある場合は、その期間１週間ずらすという実装を行っております。
 */
   this.calcMostRect = function(areaObj) {
     var day_mix = this.dayCell;
@@ -175,13 +180,9 @@ this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
             var d = new Date(date);
             //コンストラクタでやろうとするとうまく行かなかった。。
             //
-            //4月1日を基準にして曜日の差分で時間を戻し、最大５週までの増加させ
-
-て毎週を表現
+            //4月1日を基準にして曜日の差分で時間を戻し、最大５週までの増加させて毎週を表現
             d.setTime(date.getTime() + 1000 * 60 * 60 * 24 *
-              ((7 + getDayIndex(day_mix[j].charAt(0)) - date.getDay()) % 7) + 
-
-week * 7 * 24 * 60 * 60 * 1000
+              ((7 + getDayIndex(day_mix[j].charAt(0)) - date.getDay()) % 7) + week * 7 * 24 * 60 * 60 * 1000
             );
             //年末年始のずらしの対応
             //休止期間なら、今後の日程を１週間ずらす
@@ -233,9 +234,7 @@ week * 7 * 24 * 60 * 60 * 1000
     var now = new Date();
 
     for (var i in day_list) {
-      if (this.mostRecent == null && now.getTime() < day_list[i].getTime() + 
-
-24 * 60 * 60 * 1000) {
+      if (this.mostRecent == null && now.getTime() < day_list[i].getTime() + 24 * 60 * 60 * 1000) {
         this.mostRecent = day_list[i];
         break;
       }
@@ -250,9 +249,7 @@ week * 7 * 24 * 60 * 60 * 1000
     var day_text = "<ul>";
     for (var i in this.dayList) {
       var d = this.dayList[i];
-      day_text += "<li>" + d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + 
-
-d.getDate() + "</li>";
+      day_text += "<li>" + d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + "</li>";
     };
     day_text += "</ul>";
     return day_text;
@@ -290,7 +287,7 @@ var DescriptionModel = function(data) {
  * target.csvのモデルです。
  */
 var TargetRowModel = function(data) {
-  this.type = data[0];
+  this.label = data[0];
   this.name = data[1];
   this.notice = data[2];
   this.furigana = data[3];
@@ -389,13 +386,9 @@ $(function() {
         select_html += '<option value="-1">地域を選択してください</option>';
         for (var row_index in areaModels) {
           var area_name = areaModels[row_index].label;
-          var selected = (selected_name == area_name) ? 'selected="selected"' 
+          var selected = (selected_name == area_name) ? 'selected="selected"' : "";
 
-: "";
-
-          select_html += '<option value="' + row_index + '" ' + selected + " 
-
->" + area_name + "</option>";
+          select_html += '<option value="' + row_index + '" ' + selected + " >" + area_name + "</option>";
         }
 
         //デバッグ用
@@ -431,7 +424,7 @@ $(function() {
           var row = new TargetRowModel(data[i]);
           for (var j = 0; j < descriptions.length; j++) {
             //一致してるものに追加する。
-            if (descriptions[j].label == row.type) {
+            if (descriptions[j].label == row.label) {
               descriptions[j].targets.push(row);
               break;
             }
@@ -448,9 +441,7 @@ $(function() {
 
   function updateData(row_index) {
     //SVG が使えるかどうかの判定を行う。
-    //TODO Android 2.3以下では見れない（代替の表示も含め）不具合が改善されてな
-
-い。。
+    //TODO Android 2.3以下では見れない（代替の表示も含め）不具合が改善されてない。。
     //参考 http://satussy.blogspot.jp/2011/12/javascript-svg.html
     var ableSVG = (window.SVGAngle !== void 0);
     //var ableSVG = false;  // SVG未使用の場合、descriptionの1項目目を使用
@@ -460,12 +451,10 @@ $(function() {
     areaModel.calcMostRect();
     //トラッシュの近い順にソートします。
     areaModel.sortTrash();
-    var accordion_height = window.innerHeight / descriptions.length;
+    var accordion_height = $(window).height() / descriptions.length;
     if(descriptions.length>4){
-      accordion_height = window.innerHeight / 4.1;
-      if (accordion_height>140) {accordion_height = window.innerHeight / 
-
-descriptions.length;};
+      accordion_height = accordion_height / 4.1;
+      if (accordion_height>140) {accordion_height = accordion_height / descriptions.length;};
       if (accordion_height<130) {accordion_height=130;};
     }
     var styleHTML = "";
@@ -497,9 +486,7 @@ descriptions.length;};
               target_tag += "<ul>";
             }
 
-            target_tag += '<li style="list-style:none;">' + target.name + 
-
-"</li>";
+            target_tag += '<li style="list-style:none;">' + target.name + "</li>";
             target_tag += '<p class="note">' + target.notice + "</p>";
           }
 
@@ -507,9 +494,7 @@ descriptions.length;};
 
           var dateLabel = trash.getDateLabel();
           //あと何日かを計算する処理です。
-          var leftDay = Math.ceil((trash.mostRecent.getTime() - today.getTime
-
-()) / (1000 * 60 * 60 * 24))
+          var leftDay = Math.ceil((trash.mostRecent.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
           var leftDayText = "";
           if (leftDay == 0) {
@@ -521,38 +506,19 @@ descriptions.length;};
           } else {
             leftDayText = leftDay + "日後";
           }
-          
-          //styleHTML += '#accordion-group' + d_no + '{background-color:  ' + 
 
-description.background + ';} ';
-	  //IE対応
-          styleHTML = 'background-color:  ' + description.background ;
+          styleHTML += '#accordion-group' + d_no + '{background-color:  ' + description.background + ';} ';
 
           accordionHTML +=
-            //'<div class="accordion-group" id="accordion-group' + d_no + '">' 
-
-+
-	    //IE対応
-            '<div class="accordion-group" id="accordion-group' + d_no + '" 
-
-style="' + styleHTML + '">' +
-
+            '<div class="accordion-group" id="accordion-group' + d_no + '">' +
             '<div class="accordion-heading">' +
-            '<a class="accordion-toggle" style="height:' + accordion_height + 
-
-'px" data-toggle="collapse" data-parent="#accordion" href="#collapse' + i + 
-
-'">' +
+            '<a class="accordion-toggle" style="height:' + accordion_height + 'px" data-toggle="collapse" data-parent="#accordion" href="#collapse' + i + '">' +
             '<div class="left-day">' + leftDayText + '</div>' +
             '<div class="accordion-table" >';
           if (ableSVG && SVGLabel) {
-            accordionHTML += '<img src="' + description.styles + '" alt="' + 
-
-description.label + '"  />';
+            accordionHTML += '<img src="' + description.styles + '" alt="' + description.label + '"  />';
           } else {
-            accordionHTML += '<p class="text-center">' + description.label + 
-
-"</p>";
+            accordionHTML += '<p class="text-center">' + description.label + "</p>";
           }
           accordionHTML += "</div>" +
             '<h6><p class="text-left date">' + dateLabel + "</p></h6>" +
@@ -566,11 +532,10 @@ description.label + '"  />';
             "</div>";
       }
     }
-    
-    //IE対応
-    //$("#accordion-style").html('<!-- ' + styleHTML + ' -->');
 
-   var accordion_elm = $("#accordion");
+    $("#accordion-style").html('<!-- ' + styleHTML + ' -->');
+
+    var accordion_elm = $("#accordion");
     accordion_elm.html(accordionHTML);
 
     $('html,body').animate({scrollTop: 0}, 'fast');
@@ -599,9 +564,7 @@ description.label + '"  />';
     }
     setSelectedAreaName(areaModels[row_index].label);
 
-    if ($("#accordion").children().length === 0 && descriptions.length === 0) 
-
-{
+    if ($("#accordion").children().length === 0 && descriptions.length === 0) {
 
       createMenuList(function() {
         updateData(row_index);
