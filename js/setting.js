@@ -24,5 +24,5 @@ var MaxDescription = 3;
 
 var MaxMonth = 3;
 
-var WeekShift = true;
+var WeekShift = false;
 // 休止期間なら週をずらすときは、true。金沢の仕様は、true。
