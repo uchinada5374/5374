@@ -114,7 +114,7 @@ var TrashModel = function(_lable, _cell, remarks) {
      	
      }
 //  if (tmpflag1 == 1){
-     hiddenFlg = 1;
+     this.hiddenFlg = 1;
 //  }
   /**
    * uchinada original 20140929 end
