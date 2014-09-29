@@ -80,7 +80,8 @@ var TrashModel = function(_lable, _cell, remarks) {
   this.label = _lable;
   this.description;
   this.regularFlg = 1;      // 定期回収フラグ（デフォルトはオン:1）
-
+  this.hiddenFlg = 0;      // 非表示フラグ（デフォルトはオフ:0）　20140929 uchinada original
+  
   var result_text = "";
   var today = new Date();
 
@@ -96,6 +97,15 @@ var TrashModel = function(_lable, _cell, remarks) {
       this.regularFlg = 0;  // 定期回収フラグオフ
     }
   }
+  
+  /**
+   * uchinada original 20140929 strat
+   */
+   hiddenFlg = this.getRemark2;
+  /**
+   * uchinada original 20140929 end
+   */
+  
   if (monthSplitFlag){
     var monthList="";
     for (var m in this.mflag) {
@@ -144,6 +154,32 @@ var TrashModel = function(_lable, _cell, remarks) {
     });
     return ret;
   }
+  
+  /**
+   * uchinada original 20140929 strat
+   */
+  this.getRemark2 = function getRemark2() {
+    var ret = 0;
+    var tmpflag = 0; //
+    
+    this.dayCell.forEach(function(day){
+      if (day.substr(0,1) == "*") {
+        tmpflag = 1; //一時フラグ（町会リサイクルフラグ）　ON
+      };
+    });
+    
+    if (tmpflag == 1 ){
+    	if(this.dayCell[1] == "20160101"){
+    	    ret = 1;
+    	}
+    }
+    return ret;
+  }  
+  
+  /**
+   * uchinada original 20140929 end
+   */
+  
   /**
   このゴミの年間のゴミの日を計算します。
   センターが休止期間がある場合は、その期間１週間ずらすという実装を行っております。
@@ -462,11 +498,15 @@ $(function() {
     //アコーディオンの分類から対応の計算を行います。
     for (var i in areaModel.trash) {
       var trash = areaModel.trash[i];
-
-      if (trash.regularFlg == 0){
+  /**
+   * uchinada original 20140929 strat
+   */
+      if (trash.hiddenFlg == 1){
       	break;
       }
-
+  /**
+   * uchinada original 20140929 end
+   */
       for (var d_no in descriptions) {
         var description = descriptions[d_no];
        if (description.label != trash.label) {
