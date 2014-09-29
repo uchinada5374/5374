@@ -101,20 +101,19 @@ var TrashModel = function(_lable, _cell, remarks) {
   /**
    * uchinada original 20140929 strat
    */
+   var tmpflag1 = 0;
+   var tmpflag2 = 0;
+   
      for (var j in this.dayCell) {
      	if(this.dayCell[j].substr(0,1) == "*"){
-     	   var tmpflag1 = 1;
-     	}else{
-     	   var tmpflg1 = 0;
+     	    tmpflag1 = 1;
      	}
      	if(this.dayCell[j] == "20160101"){
-     	   var tmpflag2 = 1;
-     	}else{
-     	   var tmpflg2 = 0;
+     	    tmpflag2 = 1;
      	}     
      	
      }
-  if (tmpflag1 == 1 && tmpflag2 == 1){
+  if (tmpflag1 == 1){
      hiddenFlg = 1;
   }
   /**
