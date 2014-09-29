@@ -515,7 +515,7 @@ $(function() {
   /**
    * uchinada original 20140929 strat
    */
-      if (trash.hiddenFlg == 1){
+      if (trash.hiddenFlg == 0){
       	break;
       }
   /**
