@@ -463,9 +463,7 @@ $(function() {
     for (var i in areaModel.trash) {
       var trash = areaModel.trash[i];
 
-      if (trash.regularFlg == 0){
-      	exit;
-      }
+
 
       for (var d_no in descriptions) {
         var description = descriptions[d_no];
