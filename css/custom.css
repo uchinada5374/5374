@@ -18,7 +18,7 @@ font-family:".HiraKakuInterface-W1",'Lucida Grande',
 a.accordion-toggle-top{
 	margin: 0;
 	text-align: left;
-	font-size: 25px;
+	font-size: 20px;
 	margin: 15px 0 15px 15px;
 
 }
@@ -59,7 +59,7 @@ a.accordion-toggle-top{
 	text-align: center;
 	margin: 0 auto;
 	display: block;
-	font-size: 12px;
+	font-size: 16px;
 }
 a.accordion-toggle-top:hover{
 	color: #000000;
