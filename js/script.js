@@ -576,7 +576,7 @@ $(function() {
         updateData(row_index);
       });
     } else {
-      updateData(row_index);
+
     }
   }
 
