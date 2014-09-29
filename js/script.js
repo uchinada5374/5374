@@ -101,18 +101,7 @@ var TrashModel = function(_lable, _cell, remarks) {
   /**
    * uchinada original 20140929 strat
    */
-   var tmpflag1 = 0;
-   var tmpflag2 = 0;
-   
-     for (var j in this.dayCell) {
-     	if(this.dayCell[j].substr(0,1) == "*"){
-     	    tmpflag1 = 1;
-     	}
-     	if(this.dayCell[j] == "20160101"){
-     	    tmpflag2 = 1;
-     	}     
-     	
-     }
+
 //  if (tmpflag1 == 1){
      this.hiddenFlg = 1;
 //  }
@@ -169,30 +158,7 @@ var TrashModel = function(_lable, _cell, remarks) {
     return ret;
   }
   
-  /**
-   * uchinada original 20140929 strat
-   */
-  this.getRemark2 = function getRemark2() {
-    var ret = 0;
-    var tmpflag = 0; //
-    
-    this.dayCell.forEach(function(day){
-      if (day.substr(0,1) == "*") {
-        tmpflag = 1; //一時フラグ（町会リサイクルフラグ）　ON
-      };
-    });
-    
-    if (tmpflag == 1 ){
-    	if(this.dayCell[1] == "20160101"){
-    	    ret = 1;
-    	}
-    }
-    return ret;
-  }  
-  
-  /**
-   * uchinada original 20140929 end
-   */
+
   
   /**
   このゴミの年間のゴミの日を計算します。
@@ -515,7 +481,7 @@ $(function() {
   /**
    * uchinada original 20140929 strat
    */
-      if (trash.hiddenFlg == 0){
+      if (trash.hiddenFlg == 1){
       	break;
       }
   /**
