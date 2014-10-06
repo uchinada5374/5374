@@ -491,9 +491,8 @@ $(function() {
    /**
      * uchinada original 20140929 strat
      */
-        var remark2 = trash.remarks;
         if (description.label == "町会リサイクル" && areaModel.recycleflg == "0"){
-          break;
+//          break;
         }
     /**
      * uchinada original 20140929 end
