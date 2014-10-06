@@ -7,7 +7,7 @@ var AreaModel = function() {
   this.label;
   this.centerName;
   this.center;
-//1  this.recycleflg; //uchinada original 20140929 
+  this.recycleflg; //uchinada original 20140929 
   this.trash = new Array();
   /**
   各ゴミのカテゴリに対して、最も直近の日付を計算します。
@@ -355,8 +355,8 @@ $(function() {
         var area = new AreaModel();
         area.label = row[0];
         area.centerName = row[1];
-//1	area.recycleflg = row[2];	//20140929 uchinada original
-//        areaModels.push(area);	20140929 uchinada comment out
+	area.recycleflg = row[2];	//20140929 uchinada original
+        areaModels.push(area);
 //        //２列目以降の処理		20140929 uchinada comment out
         //３列目以降の処理
         for (var r = 2; r < 2 + MaxDescription; r++) {	//20140929 uchinada comment out
@@ -390,7 +390,7 @@ $(function() {
         var selected_name = getSelectedAreaName();
         var area_select_form = $("#select_area");
         var select_html = "";
-        select_html += '<option value="-1">test地域を選択してください</option>';
+        select_html += '<option value="-1">地域を選択してください</option>';
         for (var row_index in areaModels) {
           var area_name = areaModels[row_index].label;
           var selected = (selected_name == area_name) ? 'selected="selected"' : "";
