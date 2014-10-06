@@ -7,6 +7,7 @@ var AreaModel = function() {
   this.label;
   this.centerName;
   this.center;
+  this.recycleflg; //uchinada original 20140929 
   this.trash = new Array();
   /**
   各ゴミのカテゴリに対して、最も直近の日付を計算します。
@@ -316,9 +317,6 @@ var TargetRowModel = function(data) {
 var RemarkModel = function(data) {
   this.id = data[0];
   this.text = data[1];
-// uchinada original 20140929 strat
-  this.recycleflg = data[2];
-// uchinada original 20140929 end
 }
 
 /* var windowHeight; */
@@ -370,9 +368,11 @@ $(function() {
         area.label = row[0];
         area.centerName = row[1];
 
-        areaModels.push(area);
-        //２列目以降の処理
-        for (var r = 2; r < 2 + MaxDescription; r++) {
+//        areaModels.push(area);	20140929 uchinada comment out
+//        //２列目以降の処理		20140929 uchinada comment out
+        //３列目以降の処理
+//        for (var r = 2; r < 2 + MaxDescription; r++) {	20140929 uchinada comment out
+        for (var r = 3; r < 3 + MaxDescription; r++) {		//20140929 uchinada original
           if (area_days_label[r]) {
             var trash = new TrashModel(area_days_label[r], row[r], remarks);
             area.trash.push(trash);
@@ -492,7 +492,7 @@ $(function() {
      * uchinada original 20140929 strat
      */
         var remark2 = trash.remarks;
-        if (description.label == "町会リサイクル" && trash.remarks.recycleflg == "0"){
+        if (description.label == "町会リサイクル" && areaModel.recycleflg == "0"){
           break;
         }
     /**
@@ -554,7 +554,7 @@ $(function() {
           if (ableSVG && SVGLabel) {
             accordionHTML += '<img src="' + description.styles + '" alt="' + description.label + '"  />';
           } else {
-            accordionHTML += '<p class="text-center">' + "test3" + remark2.id  + description.label + "</p>";
+            accordionHTML += '<p class="text-center">' + "test4" + areaModel.recycleflg  + description.label + "</p>";
           }
           accordionHTML += "</div>" +
             '<h6><p class="text-left date">' + dateLabel + "</p></h6>" +
