@@ -359,8 +359,8 @@ $(function() {
         areaModels.push(area);
 //        //２列目以降の処理		20140929 uchinada comment out
         //３列目以降の処理
-        for (var r = 2; r < 2 + MaxDescription; r++) {	//20140929 uchinada comment out
-//        for (var r = 3; r < 3 + MaxDescription; r++) {		//20140929 uchinada original
+//        for (var r = 2; r < 2 + MaxDescription; r++) {	//20140929 uchinada comment out
+        for (var r = 3; r < 3 + MaxDescription; r++) {		//20140929 uchinada original
           if (area_days_label[r]) {
             var trash = new TrashModel(area_days_label[r], row[r], remarks);
             area.trash.push(trash);
@@ -541,7 +541,7 @@ $(function() {
           if (ableSVG && SVGLabel) {
             accordionHTML += '<img src="' + description.styles + '" alt="' + description.label + '"  />';
           } else {
-            accordionHTML += '<p class="text-center">' + "test4"  + description.label + "</p>";
+            accordionHTML += '<p class="text-center">' + "test5" + areaModel.recycleflg  + description.label + "</p>";
           }
           accordionHTML += "</div>" +
             '<h6><p class="text-left date">' + dateLabel + "</p></h6>" +
