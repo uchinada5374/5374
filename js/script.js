@@ -479,9 +479,9 @@ $(function() {
    /**
      * uchinada original 20140929 strat
      */
-        if (description.label == "町会リサイクル" && areaModel.recycleflg == "0"){
+//        if (description.label == "町会リサイクル" && areaModel.recycleflg == "0"){
 //          break;
-        }
+//        }
     /**
      * uchinada original 20140929 end
      */
@@ -541,7 +541,7 @@ $(function() {
           if (ableSVG && SVGLabel) {
             accordionHTML += '<img src="' + description.styles + '" alt="' + description.label + '"  />';
           } else {
-            accordionHTML += '<p class="text-center">' + "test4" + areaModel.recycleflg  + description.label + "</p>";
+            accordionHTML += '<p class="text-center">' + "test4"  + description.label + "</p>";
           }
           accordionHTML += "</div>" +
             '<h6><p class="text-left date">' + dateLabel + "</p></h6>" +
