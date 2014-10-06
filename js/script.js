@@ -7,7 +7,7 @@ var AreaModel = function() {
   this.label;
   this.centerName;
   this.center;
-  this.recycleflg; //uchinada original 20140929 
+//1  this.recycleflg; //uchinada original 20140929 
   this.trash = new Array();
   /**
   各ゴミのカテゴリに対して、最も直近の日付を計算します。
@@ -355,7 +355,7 @@ $(function() {
         var area = new AreaModel();
         area.label = row[0];
         area.centerName = row[1];
-	area.recycleflg = row[2];	//20140929 uchinada original
+//1	area.recycleflg = row[2];	//20140929 uchinada original
 //        areaModels.push(area);	20140929 uchinada comment out
 //        //２列目以降の処理		20140929 uchinada comment out
         //３列目以降の処理
