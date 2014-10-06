@@ -367,7 +367,7 @@ $(function() {
         var area = new AreaModel();
         area.label = row[0];
         area.centerName = row[1];
-
+	area.recycleflg = row[2];	//20140929 uchinada original
 //        areaModels.push(area);	20140929 uchinada comment out
 //        //２列目以降の処理		20140929 uchinada comment out
         //３列目以降の処理
