@@ -316,6 +316,9 @@ var TargetRowModel = function(data) {
 var RemarkModel = function(data) {
   this.id = data[0];
   this.text = data[1];
+// uchinada original 20140929 strat
+  this.recycleflg = data[2];
+// uchinada original 20140929 end
 }
 
 /* var windowHeight; */
@@ -478,20 +481,23 @@ $(function() {
     //アコーディオンの分類から対応の計算を行います。
     for (var i in areaModel.trash) {
       var trash = areaModel.trash[i];
-  /**
-   * uchinada original 20140929 strat
-   */
-      if (trash.hiddenFlg == 1){
-      	break;
-      }
-  /**
-   * uchinada original 20140929 end
-   */
+
       for (var d_no in descriptions) {
         var description = descriptions[d_no];
        if (description.label != trash.label) {
           continue;
         }
+
+   /**
+     * uchinada original 20140929 strat
+     */
+        if (description.label == "町会リサイクル" && trash.remarks.recycleflg == "0"){
+          break;
+        }
+    /**
+     * uchinada original 20140929 end
+     */
+
 
           var target_tag = "";
           var furigana = "";
