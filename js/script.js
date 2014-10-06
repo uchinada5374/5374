@@ -81,7 +81,6 @@ var TrashModel = function(_lable, _cell, remarks) {
   this.label = _lable;
   this.description;
   this.regularFlg = 1;      // 定期回収フラグ（デフォルトはオン:1）
-  this.hiddenFlg = 0;      // 非表示フラグ（デフォルトはオフ:0）　20140929 uchinada original
   
   var result_text = "";
   var today = new Date();
@@ -98,17 +97,6 @@ var TrashModel = function(_lable, _cell, remarks) {
       this.regularFlg = 0;  // 定期回収フラグオフ
     }
   }
-  
-  /**
-   * uchinada original 20140929 strat
-   */
-
-//  if (tmpflag1 == 1){
-//     this.hiddenFlg = 1;
-//  }
-  /**
-   * uchinada original 20140929 end
-   */
   
   if (monthSplitFlag){
     var monthList="";
@@ -371,8 +359,8 @@ $(function() {
 //        areaModels.push(area);	20140929 uchinada comment out
 //        //２列目以降の処理		20140929 uchinada comment out
         //３列目以降の処理
-//        for (var r = 2; r < 2 + MaxDescription; r++) {	20140929 uchinada comment out
-        for (var r = 3; r < 3 + MaxDescription; r++) {		//20140929 uchinada original
+        for (var r = 2; r < 2 + MaxDescription; r++) {	//20140929 uchinada comment out
+//        for (var r = 3; r < 3 + MaxDescription; r++) {		//20140929 uchinada original
           if (area_days_label[r]) {
             var trash = new TrashModel(area_days_label[r], row[r], remarks);
             area.trash.push(trash);
