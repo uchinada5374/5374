@@ -491,6 +491,7 @@ $(function() {
    /**
      * uchinada original 20140929 strat
      */
+        var remark2 = trash.remarks;
         if (description.label == "町会リサイクル" && trash.remarks.recycleflg == "0"){
           break;
         }
@@ -553,7 +554,7 @@ $(function() {
           if (ableSVG && SVGLabel) {
             accordionHTML += '<img src="' + description.styles + '" alt="' + description.label + '"  />';
           } else {
-            accordionHTML += '<p class="text-center">' + "test2" + trash.remarks.recycleflg  + description.label + "</p>";
+            accordionHTML += '<p class="text-center">' + "test2" + remark2.id  + description.label + "</p>";
           }
           accordionHTML += "</div>" +
             '<h6><p class="text-left date">' + dateLabel + "</p></h6>" +
