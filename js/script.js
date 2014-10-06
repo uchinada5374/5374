@@ -479,9 +479,9 @@ $(function() {
    /**
      * uchinada original 20140929 strat
      */
-//        if (description.label == "町会リサイクル" && areaModel.recycleflg == "0"){
-//          break;
-//        }
+        if (description.label == "町会リサイクル" && areaModel.recycleflg == "0"){
+          break;
+        }
     /**
      * uchinada original 20140929 end
      */
@@ -541,7 +541,7 @@ $(function() {
           if (ableSVG && SVGLabel) {
             accordionHTML += '<img src="' + description.styles + '" alt="' + description.label + '"  />';
           } else {
-            accordionHTML += '<p class="text-center">' + "test5" + areaModel.recycleflg  + description.label + "</p>";
+            accordionHTML += '<p class="text-center">' + description.label + "</p>";
           }
           accordionHTML += "</div>" +
             '<h6><p class="text-left date">' + dateLabel + "</p></h6>" +
@@ -580,7 +580,7 @@ $(function() {
     });
   }
 
-  function onChangeSelect(row_index) {　
+  function onChangeSelect(row_index) {
     if (row_index == -1) {
       $("#accordion").html("");
       setSelectedAreaName("");
