@@ -124,7 +124,7 @@ var TrashModel = function(_lable, _cell, remarks) {
   this.getDateLabel = function() {
 //20141008 uchinada up str	
 //    var result_text = this.mostRecent.getFullYear() + "/" + (1 + this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
-	this.mostRecent != null ? this.mostRecent.getFullYear() + "/" + (1 + this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate() : "";
+	var result_text = this.mostRecent != null ? this.mostRecent.getFullYear() + "/" + (1 + this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate() : "";
 //20141008 ushinada up end  	
   	return this.getRemark() + this.dayLabel + " " + result_text;
   }
