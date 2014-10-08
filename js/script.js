@@ -95,7 +95,7 @@ var TrashModel = function(_lable, _cell, remarks) {
     } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) == "*") {
 //20141008 uchinada add str
     } else if (this.dayCell[j] == "") {
-      result_text = "この地域では回収を行っていません。";
+      result_text = "この地域では町会リサイクルは実施しておりません。常設リサイクルステーションをご利用ください。";
       this.regularFlg = 0;  // 定期回収フラグオフ
 //20141008 uchinada add end
     } else {
