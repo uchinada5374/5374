@@ -7,7 +7,6 @@ var AreaModel = function() {
   this.label;
   this.centerName;
   this.center;
-  this.recycleflg; //uchinada original 20140929 
   this.trash = new Array();
   /**
   各ゴミのカテゴリに対して、最も直近の日付を計算します。
@@ -48,6 +47,9 @@ var AreaModel = function() {
 */
   this.sortTrash = function() {
     this.trash.sort(function(a, b) {
+//20141008 uchinada add str
+      if(a.mostRecent == undefined || b.mostRecent == undefined) return 0; //回収なしを考慮
+//20141008 uchinada add end
       var at = a.mostRecent.getTime();
       var bt = b.mostRecent.getTime();
       if (at < bt) return -1;
@@ -81,7 +83,7 @@ var TrashModel = function(_lable, _cell, remarks) {
   this.label = _lable;
   this.description;
   this.regularFlg = 1;      // 定期回収フラグ（デフォルトはオン:1）
-  
+
   var result_text = "";
   var today = new Date();
 
@@ -91,13 +93,17 @@ var TrashModel = function(_lable, _cell, remarks) {
     } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) != "*") {
       result_text += "第" + this.dayCell[j].charAt(1) + this.dayCell[j].charAt(0) + "曜日 ";
     } else if (this.dayCell[j].length == 2 && this.dayCell[j].substr(0,1) == "*") {
+//20141008 uchinada add str
+    } else if (this.dayCell[j] == "") {
+      result_text = "この地域では回収を行っていません。";
+      this.regularFlg = 0;  // 定期回収フラグオフ
+//20141008 uchinada add end
     } else {
       // 不定期回収の場合（YYYYMMDD指定）
       result_text = "不定期 ";
       this.regularFlg = 0;  // 定期回収フラグオフ
     }
   }
-  
   if (monthSplitFlag){
     var monthList="";
     for (var m in this.mflag) {
@@ -116,8 +122,11 @@ var TrashModel = function(_lable, _cell, remarks) {
 
 
   this.getDateLabel = function() {
-    var result_text = this.mostRecent.getFullYear() + "/" + (1 + this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
-    return this.getRemark() + this.dayLabel + " " + result_text;
+//20141008 uchinada up str	
+//    var result_text = this.mostRecent.getFullYear() + "/" + (1 + this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate();
+	this.mostRecent != null ? this.mostRecent.getFullYear() + "/" + (1 + this.mostRecent.getMonth()) + "/" + this.mostRecent.getDate() : "";
+//20141008 ushinada up end  	
+  	return this.getRemark() + this.dayLabel + " " + result_text;
   }
 
   var day_enum = ["日", "月", "火", "水", "木", "金", "土"];
@@ -146,9 +155,6 @@ var TrashModel = function(_lable, _cell, remarks) {
     });
     return ret;
   }
-  
-
-  
   /**
   このゴミの年間のゴミの日を計算します。
   センターが休止期間がある場合は、その期間１週間ずらすという実装を行っております。
@@ -355,12 +361,10 @@ $(function() {
         var area = new AreaModel();
         area.label = row[0];
         area.centerName = row[1];
-	area.recycleflg = row[2];	//20140929 uchinada original
+
         areaModels.push(area);
-//        //２列目以降の処理		20140929 uchinada comment out
-        //３列目以降の処理
-//        for (var r = 2; r < 2 + MaxDescription; r++) {	//20140929 uchinada comment out
-        for (var r = 3; r < 3 + MaxDescription; r++) {		//20140929 uchinada original
+        //２列目以降の処理
+        for (var r = 2; r < 2 + MaxDescription; r++) {
           if (area_days_label[r]) {
             var trash = new TrashModel(area_days_label[r], row[r], remarks);
             area.trash.push(trash);
@@ -476,17 +480,6 @@ $(function() {
           continue;
         }
 
-   /**
-     * uchinada original 20140929 strat
-     */
-        if (description.label == "町会リサイクル" && areaModel.recycleflg == "0"){
-          break;
-        }
-    /**
-     * uchinada original 20140929 end
-     */
-
-
           var target_tag = "";
           var furigana = "";
           var target_tag = "";
@@ -512,8 +505,10 @@ $(function() {
 
           var dateLabel = trash.getDateLabel();
           //あと何日かを計算する処理です。
-          var leftDay = Math.ceil((trash.mostRecent.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-
+//20141008 uchinada up str
+//        var leftDay = Math.ceil((trash.mostRecent.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+          var leftDay = trash.mostRecent != null ? Math.ceil((trash.mostRecent.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)) : -1;// -1は回収なし
+//20141008 uchinada up end
           var leftDayText = "";
           if (leftDay == 0) {
             leftDayText = "今日";
@@ -521,6 +516,10 @@ $(function() {
             leftDayText = "明日";
           } else if (leftDay == 2) {
             leftDayText = "明後日"
+//20141008 uchinada add str
+          } else if (leftDay == -1) {
+            leftDayText = "";
+//20141008 uchinada add end
           } else {
             leftDayText = leftDay + "日後";
           }
@@ -580,7 +579,7 @@ $(function() {
     });
   }
 
-  function onChangeSelect(row_index) {
+  function onChangeSelect(row_index) {　
     if (row_index == -1) {
       $("#accordion").html("");
       setSelectedAreaName("");
